@@ -167,6 +167,32 @@ class BlueToothDevices : ComponentActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bluetoothdevices)
 
+        try {
+            //蓝牙是否已打开
+            if (isOpenBluetooth()) {
+                //    showMsg("蓝牙已打开")
+            }
+            //是Android12
+            if (isAndroid12()) {
+                //检查是否有BLUETOOTH_CONNECT权限
+                if (hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+                    //打开蓝牙
+                    enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+                } else {
+                    //请求权限
+                    requestBluetoothConnect.launch(Manifest.permission.BLUETOOTH_CONNECT)
+                }
+            }
+            //不是Android12 直接打开蓝牙
+            enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+
+            pairedDeviceList()
+        } catch (e : Exception)
+        {
+
+        }
+
+
         findViewById<Button>(R.id.btn_bluetooth_ok).setOnClickListener({
             val intent=Intent()
             intent.putExtra( "name", selectName)
@@ -197,6 +223,8 @@ class BlueToothDevices : ComponentActivity(){
             pairedDeviceList()
         })
 
+
+
     }
 
     //创建RecyclerView适配器
@@ -220,7 +248,7 @@ class BlueToothDevices : ComponentActivity(){
              //   it.context.setResult(RESULT_OK, intent)
                 BlueToothDevices.selectName = device.deviceName
                 BlueToothDevices.selectAddress = device.device.address
-                Toast.makeText(parent.context, device.deviceName, Toast.LENGTH_SHORT).show()
+             //   Toast.makeText(parent.context, device.deviceName, Toast.LENGTH_SHORT).show()
             }
             return viewHolder
         }

@@ -1,6 +1,7 @@
 package com.hyena.organ
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -8,9 +9,11 @@ import android.bluetooth.BluetoothSocket
 import android.bluetooth.le.BluetoothLeScanner
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
@@ -18,8 +21,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import com.hyena.organ.R.*
+import com.hyena.organ.R.drawable.*
 import com.hyena.organ.ui.theme.OrganTheme
 import java.io.IOException
 import java.nio.charset.Charset
@@ -100,9 +106,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-
-
 //
     private var activityResultLauncher : ActivityResultLauncher<Intent>  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
@@ -111,25 +114,51 @@ class MainActivity : ComponentActivity() {
             bluetoothName = strName.toString()
             bluetoothAddress = strAddress.toString()
             ConnectBluetooth()
-            Toast.makeText(this,"返回的数据： $bluetoothName",Toast.LENGTH_LONG).show()
+            findViewById<Button>(id.btn_power).setBackgroundResource(R.drawable.power_button_shape_enable)
+
+         //   Toast.makeText(this,"返回的数据： $bluetoothName",Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun SetConnectedDeviceName(dev: String)
+    {
+        findViewById<TextView>(id.text_selected_bt_device).setText(dev)
+    }
+
+    @SuppressLint("ResourceAsColor")
+    fun SetPowerButtonColor(background: Drawable)
+    {
+        findViewById<Button>(id.btn_power).setBackground(background)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_controler)
-
+        setContentView(layout.activity_controler)
 
         if (isOpenBluetooth()) {
             myBluetoothAdapter = (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
         }
 
-        findViewById<Button>(R.id.btn_settings).setOnClickListener({
+        SetConnectedDeviceName("")
+        findViewById<Button>(id.btn_power).setBackgroundResource(R.drawable.power_button_shape_disable)
+
+        findViewById<Button>(id.btn_settings).setOnClickListener({
             val intent = Intent(this, BlueToothDevices::class.java)
             activityResultLauncher.launch(intent)
         })
 
-        findViewById<Button>(R.id.btn_ok).setOnClickListener({
+        findViewById<Button>(id.btn_power).setOnClickListener({
+            if (mBluetoothSocket != null && isBlueConnected)
+            {
+                try {
+                    mBluetoothSocket!!.outputStream.write("ON_OFF ".toByteArray(Charsets.UTF_8))
+                } catch (e : IOException){
+                    showMsg(e.toString())
+                }
+            }
+        })
+
+        findViewById<Button>(id.btn_ok).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -140,7 +169,7 @@ class MainActivity : ComponentActivity() {
             }
         })
 
-        findViewById<Button>(R.id.btn_mode_up).setOnClickListener({
+        findViewById<Button>(id.btn_mode_up).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -150,7 +179,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_mode_down).setOnClickListener({
+        findViewById<Button>(id.btn_mode_down).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -160,7 +189,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_speed_up).setOnClickListener({
+        findViewById<Button>(id.btn_speed_up).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -170,7 +199,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_speed_down).setOnClickListener({
+        findViewById<Button>(id.btn_speed_down).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -180,7 +209,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_1).setOnClickListener({
+        findViewById<Button>(id.btn_num_1).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -190,7 +219,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_2).setOnClickListener({
+        findViewById<Button>(id.btn_num_2).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -200,7 +229,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_3).setOnClickListener({
+        findViewById<Button>(id.btn_num_3).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -210,7 +239,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_4).setOnClickListener({
+        findViewById<Button>(id.btn_num_4).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -220,7 +249,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_5).setOnClickListener({
+        findViewById<Button>(id.btn_num_5).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -230,7 +259,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_6).setOnClickListener({
+        findViewById<Button>(id.btn_num_6).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -240,7 +269,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_7).setOnClickListener({
+        findViewById<Button>(id.btn_num_7).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -250,7 +279,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_8).setOnClickListener({
+        findViewById<Button>(id.btn_num_8).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -260,7 +289,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_9).setOnClickListener({
+        findViewById<Button>(id.btn_num_9).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -270,7 +299,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_10).setOnClickListener({
+        findViewById<Button>(id.btn_num_10).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -280,7 +309,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_11).setOnClickListener({
+        findViewById<Button>(id.btn_num_11).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -290,7 +319,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_12).setOnClickListener({
+        findViewById<Button>(id.btn_num_12).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -300,7 +329,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_13).setOnClickListener({
+        findViewById<Button>(id.btn_num_13).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -310,7 +339,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_14).setOnClickListener({
+        findViewById<Button>(id.btn_num_14).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -320,7 +349,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_15).setOnClickListener({
+        findViewById<Button>(id.btn_num_15).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -330,7 +359,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_16).setOnClickListener({
+        findViewById<Button>(id.btn_num_16).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -340,7 +369,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_17).setOnClickListener({
+        findViewById<Button>(id.btn_num_17).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -350,7 +379,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_18).setOnClickListener({
+        findViewById<Button>(id.btn_num_18).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -360,7 +389,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_19).setOnClickListener({
+        findViewById<Button>(id.btn_num_19).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -370,7 +399,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
-        findViewById<Button>(R.id.btn_num_20).setOnClickListener({
+        findViewById<Button>(id.btn_num_20).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
                 try {
@@ -415,6 +444,7 @@ class MainActivity : ComponentActivity() {
                    // mBluetoothAdapter.cancelDiscovery()
                     mBluetoothSocket!!.connect()
                     isBlueConnected = true
+                    SetConnectedDeviceName(bluetoothName)
                 }
             } catch (e: IOException) {
                 //连接失败销毁Activity

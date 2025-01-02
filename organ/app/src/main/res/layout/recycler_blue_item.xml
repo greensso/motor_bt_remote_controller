@@ -25,7 +25,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="address"
-
                 app:layout_constraintBottom_toTopOf="@+id/rbi_guideline16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/rbi_guideline14"
@@ -35,9 +34,7 @@
                 android:id="@+id/item_name"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-
                 android:text="name"
-
                 app:layout_constraintBottom_toTopOf="@+id/rbi_guideline15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/rbi_guideline14"
