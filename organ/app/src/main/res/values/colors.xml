@@ -7,5 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="button_text_color">#FF0000</color> <!-- 红色 -->
+    <color name="button_text_color">#CC444444</color>
+    <color name="button_text_color_pressed">#CC5544FF</color>
+    <color name="blue">#FF5544FF</color>
 </resources>
