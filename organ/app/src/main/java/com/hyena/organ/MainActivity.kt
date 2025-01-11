@@ -7,11 +7,13 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.bluetooth.le.BluetoothLeScanner
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -114,8 +116,6 @@ class MainActivity : ComponentActivity() {
             bluetoothName = strName.toString()
             bluetoothAddress = strAddress.toString()
             ConnectBluetooth()
-            findViewById<Button>(id.btn_power).setBackgroundResource(R.drawable.power_button_shape_enable)
-
          //   Toast.makeText(this,"返回的数据： $bluetoothName",Toast.LENGTH_LONG).show()
         }
     }
@@ -125,10 +125,33 @@ class MainActivity : ComponentActivity() {
         findViewById<TextView>(id.text_selected_bt_device).setText(dev)
     }
 
-    @SuppressLint("ResourceAsColor")
-    fun SetPowerButtonColor(background: Drawable)
-    {
-        findViewById<Button>(id.btn_power).setBackground(background)
+    fun dip2px(context: Context, dpValue: Int): Int {
+        var scale = context.resources.displayMetrics.density
+        return (dpValue * scale +0.5f).toInt()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+            keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+        {
+            if (mBluetoothSocket != null && isBlueConnected)
+            {
+                try {
+                    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                        mBluetoothSocket!!.outputStream.write("SPEED-".toByteArray())
+                        //showMsg("Speed -")
+                    } else {
+                        mBluetoothSocket!!.outputStream.write("SPEED+".toByteArray())
+                        //showMsg("Speed +")
+                    }
+                } catch (e : IOException){
+                    showMsg(e.toString())
+                }
+            }
+            return true
+        }
+
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,7 +163,6 @@ class MainActivity : ComponentActivity() {
         }
 
         SetConnectedDeviceName("")
-        findViewById<Button>(id.btn_power).setBackgroundResource(R.drawable.power_button_shape_disable)
 
         findViewById<Button>(id.btn_settings).setOnClickListener({
             val intent = Intent(this, BlueToothDevices::class.java)
@@ -189,6 +211,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
+
         findViewById<Button>(id.btn_speed_up).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
@@ -199,6 +222,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
+
+        findViewById<Button>(id.btn_speed_up).setOnLongClickListener {
+            showMsg("Long click Speed +")
+            if (mBluetoothSocket != null && isBlueConnected)
+            {
+                try {
+                    mBluetoothSocket!!.outputStream.write("SPEED>".toByteArray())
+                } catch (e : IOException){
+                    showMsg(e.toString())
+                }
+            }
+
+            true
+        }
+
         findViewById<Button>(id.btn_speed_down).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {
@@ -209,6 +247,20 @@ class MainActivity : ComponentActivity() {
                 }
             }
         })
+
+        findViewById<Button>(id.btn_speed_down).setOnLongClickListener {
+            showMsg("Long click Speed -")
+            if (mBluetoothSocket != null && isBlueConnected)
+            {
+                try {
+                    mBluetoothSocket!!.outputStream.write("SPEED<".toByteArray())
+                } catch (e : IOException){
+                    showMsg(e.toString())
+                }
+            }
+
+            true
+        }
         findViewById<Button>(id.btn_num_1).setOnClickListener({
             if (mBluetoothSocket != null && isBlueConnected)
             {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false">
+        <vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+            <path android:strokeColor="@color/button_color" android:fillColor="@color/button_color"
+                android:strokeWidth="1"
+                android:pathData="M12,1 a11,11,0,1,0,11,11 a11,11,0,0,0,-11,-11z"/>
+            <path android:strokeColor="@color/button_color"
+                android:strokeWidth="1"
+                android:pathData="M8,8 l7,7 l-3,3 l0,-12 l3,3 l-7,7 "/>
+        </vector>
+    </item>
+    <item android:state_pressed="true">
+        <vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
+            <path android:strokeColor="#66ccccff" android:fillColor="@color/button_color_pressed"
+                android:strokeWidth="1"
+                android:pathData="M12,1 a11,11,0,1,0,11,11 a11,11,0,0,0,-11,-11z"/>
+            <path android:strokeColor="@color/button_text_color_pressed"
+                android:strokeWidth="1"
+                android:pathData="M8,8 l7,7 l-3,3 l0,-12 l3,3 l-7,7 "/>
+        </vector>
+    </item>
+</selector>
