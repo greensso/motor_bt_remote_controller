@@ -7,9 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="button_text_color">#CC444444</color>
-    <color name="button_text_color_pressed">#ee8888cc</color>
-    <color name="button_color">#88cccccc</color>
-    <color name="button_color_pressed">#66ccccff</color>
+    <color name="button_text_color">#E5FFFFFF</color>
+    <color name="button_text_color_pressed">#E50049FF</color>
+    <color name="button_color">#E5000000</color>
+    <color name="button_color_pressed">#B2000000</color>
     <color name="blue">#FF5544FF</color>
+    <color name="power_button_color">#E6FF4343</color>
+    <color name="power_button_color_pressed">#FF2E27</color>
+    <color name="power_button_edge_color">#E6FF4343</color>
+    <color name="button_color_edge">#C9878787</color>
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/black"
     tools:context=".BlueToothDevices">
 
     <androidx.constraintlayout.widget.Guideline
@@ -57,7 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/number_button_shape"
-        android:text="OK"
+        android:text="@string/button_text_ok"
+        android:textSize="@dimen/devicts_btn_text_size"
+        android:textColor="@drawable/number_button_color"
         app:layout_constraintEnd_toStartOf="@+id/bd_guideline4"
         app:layout_constraintTop_toTopOf="@+id/bd_guideline" />
 
@@ -66,7 +69,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/number_button_shape"
-        android:text="Refresh"
+        android:text="@string/button_text_refresh"
+        android:textSize="@dimen/devicts_btn_text_size"
+        android:textColor="@drawable/number_button_color"
         app:layout_constraintStart_toStartOf="@+id/bd_guideline3"
         app:layout_constraintTop_toTopOf="@+id/bd_guideline" />
 
