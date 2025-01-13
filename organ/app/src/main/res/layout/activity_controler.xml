@@ -240,8 +240,8 @@
 
     <Button
         android:id="@+id/btn_power"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/power_button_shape"
         android:textSize="@dimen/number_btn_text_size"
         android:textColor="@drawable/power_button_color"
@@ -252,8 +252,8 @@
 
     <Button
         android:id="@+id/btn_settings"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/setting_button_shape"
         android:textSize="30sp"
         android:textColor="@drawable/number_button_color"

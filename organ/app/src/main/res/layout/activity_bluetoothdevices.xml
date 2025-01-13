@@ -36,6 +36,20 @@
         app:layout_constraintGuide_percent="0.08" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bd_guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bd_guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bd_guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,23 +69,25 @@
 
     <Button
         android:id="@+id/btn_bluetooth_ok"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/number_button_shape"
         android:text="@string/button_text_ok"
-        android:textSize="@dimen/devicts_btn_text_size"
         android:textColor="@drawable/number_button_color"
+        android:textSize="@dimen/devicts_btn_text_size"
         app:layout_constraintEnd_toStartOf="@+id/bd_guideline4"
+        app:layout_constraintStart_toStartOf="@+id/bd_guideline6"
         app:layout_constraintTop_toTopOf="@+id/bd_guideline" />
 
     <Button
         android:id="@+id/btn_bluetooth_refresh"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/number_button_shape"
         android:text="@string/button_text_refresh"
-        android:textSize="@dimen/devicts_btn_text_size"
         android:textColor="@drawable/number_button_color"
+        android:textSize="@dimen/devicts_btn_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/bd_guideline5"
         app:layout_constraintStart_toStartOf="@+id/bd_guideline3"
         app:layout_constraintTop_toTopOf="@+id/bd_guideline" />
 
