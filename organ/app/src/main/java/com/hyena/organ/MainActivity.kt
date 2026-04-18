@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
                     bluetoothName = lastSelectedName
                     bluetoothAddress = lastSelectedAddress
                     // 显示连接中状态
-                    SetConnectedDeviceName("${bluetoothName} (连接中...)")
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connecting_status)})")
                     ConnectBluetooth()
                 }
             } else {
@@ -273,7 +273,7 @@ class MainActivity : ComponentActivity() {
                     bluetoothName = lastSelectedName
                     bluetoothAddress = lastSelectedAddress
                     // 先显示连接中状态
-                    SetConnectedDeviceName("${bluetoothName} (连接中...)")
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connecting_status)})")
                     // 调用ConnectBluetooth方法进行连接
                     ConnectBluetooth()
                     
@@ -586,7 +586,7 @@ class MainActivity : ComponentActivity() {
             isConnecting = true
             // 显示连接中状态
             runOnUiThread {
-                SetConnectedDeviceName("${bluetoothName} (连接中...)")
+                SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connecting_status)})")
             }
 
             thread {
@@ -623,7 +623,7 @@ class MainActivity : ComponentActivity() {
                         isBlueConnected = true
                         // 连接成功，显示连接状态
                         runOnUiThread {
-                            SetConnectedDeviceName("${bluetoothName} (已连接)")
+                            SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connected_status)})")
                             isConnecting = false
                         }
                     }

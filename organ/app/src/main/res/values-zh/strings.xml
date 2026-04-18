@@ -28,4 +28,27 @@
     <string name="text_address">地址</string>
     <string name="text_name">名称</string>
     <string name="button_text_refresh">刷新</string>
+    <string name="connecting_status">连接中...</string>
+    <string name="connected_status">已连接</string>
+    <string name="paired_status">已配对</string>
+    <string name="unknown_ble_device">未知BLE设备</string>
+    <string name="unknown_device">未知设备</string>
+    <string name="no_bluetooth_devices_found">没有找到蓝牙设备</string>
+    <string name="location_permission_needed">Android12以下，6及以上需要定位权限才能扫描设备</string>
+    <string name="bluetooth_connect_permission_needed">Android12中未获取此权限，则无法打开蓝牙。</string>
+    <string name="bluetooth_scan_permission_needed">Android12中未获取此权限，则无法扫描蓝牙。</string>
+    <string name="bluetooth_turned_on">蓝牙已打开</string>
+    <string name="bluetooth_turned_off">蓝牙未打开</string>
+    <string name="pairing_success">配对成功: %s</string>
+    <string name="pairing_in_progress">正在配对: %s</string>
+    <string name="pairing_cancelled">配对取消: %s</string>
+    <string name="ble_scan_failed">BLE扫描失败，错误码: %d</string>
+    <string name="bluetooth_adapter_unavailable">无法获取蓝牙适配器</string>
+    <string name="bluetooth_not_enabled">蓝牙未启用</string>
+    <string name="classic_scan_failed">启动经典蓝牙扫描失败</string>
+    <string name="classic_scan_permission_error">启动经典蓝牙扫描权限异常</string>
+    <string name="ble_scanner_unavailable">BLE扫描器不可用</string>
+    <string name="ble_scan_permission_error">启动BLE扫描权限异常</string>
+    <string name="scanning_bluetooth_devices">正在扫描蓝牙设备...</string>
+    <string name="scan_completed">扫描完成</string>
 </resources>

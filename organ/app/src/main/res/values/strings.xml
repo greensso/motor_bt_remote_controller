@@ -28,4 +28,27 @@
     <string name="text_address">address</string>
     <string name="text_name">name</string>
     <string name="button_text_refresh">Refresh</string>
+    <string name="connecting_status">Connecting...</string>
+    <string name="connected_status">Connected</string>
+    <string name="paired_status">Paired</string>
+    <string name="unknown_ble_device">Unknown BLE Device</string>
+    <string name="unknown_device">Unknown Device</string>
+    <string name="no_bluetooth_devices_found">No Bluetooth devices found</string>
+    <string name="location_permission_needed">Android 6+ requires location permission to scan devices</string>
+    <string name="bluetooth_connect_permission_needed">Bluetooth connect permission is required to turn on Bluetooth</string>
+    <string name="bluetooth_scan_permission_needed">Bluetooth scan permission is required to scan devices</string>
+    <string name="bluetooth_turned_on">Bluetooth is turned on</string>
+    <string name="bluetooth_turned_off">Bluetooth is turned off</string>
+    <string name="pairing_success">Pairing successful: %s</string>
+    <string name="pairing_in_progress">Pairing in progress: %s</string>
+    <string name="pairing_cancelled">Pairing cancelled: %s</string>
+    <string name="ble_scan_failed">BLE scan failed, error code: %d</string>
+    <string name="bluetooth_adapter_unavailable">Unable to get Bluetooth adapter</string>
+    <string name="bluetooth_not_enabled">Bluetooth is not enabled</string>
+    <string name="classic_scan_failed">Failed to start classic Bluetooth scan</string>
+    <string name="classic_scan_permission_error">Classic Bluetooth scan permission error</string>
+    <string name="ble_scanner_unavailable">BLE scanner is unavailable</string>
+    <string name="ble_scan_permission_error">BLE scan permission error</string>
+    <string name="scanning_bluetooth_devices">Scanning for Bluetooth devices...</string>
+    <string name="scan_completed">Scan completed</string>
 </resources>

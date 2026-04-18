@@ -109,7 +109,7 @@ class BlueToothDevices : ComponentActivity(){
                 // 权限授予后，重新检查权限并启动扫描
                 checkPermissionsAndStartScan()
             } else {
-                showMsg("Android12以下，6及以上需要定位权限才能扫描设备")
+                showMsg(getString(R.string.location_permission_needed))
             }
         }
 
@@ -120,7 +120,7 @@ class BlueToothDevices : ComponentActivity(){
                 // 权限授予后，重新检查权限并启动扫描
                 checkPermissionsAndStartScan()
             } else {
-                showMsg("Android12中未获取此权限，则无法打开蓝牙。")
+                showMsg(getString(R.string.bluetooth_connect_permission_needed))
             }
         }
 
@@ -131,7 +131,7 @@ class BlueToothDevices : ComponentActivity(){
                 // 权限授予后，重新检查权限并启动扫描
                 checkPermissionsAndStartScan()
             } else {
-                showMsg("Android12中未获取此权限，则无法扫描蓝牙。")
+                showMsg(getString(R.string.bluetooth_scan_permission_needed))
             }
         }
 
@@ -145,7 +145,7 @@ class BlueToothDevices : ComponentActivity(){
                 // 蓝牙打开后，重新检查权限并启动扫描
                 checkPermissionsAndStartScan()
             } else {
-                showMsg("蓝牙未打开")
+                showMsg(getString(R.string.bluetooth_turned_off))
             }
         }
     }
@@ -172,7 +172,7 @@ class BlueToothDevices : ComponentActivity(){
                         // 检查设备是否已在列表中
                         val exists = deviceList.any { it.device.address == device.address }
                         if (!exists) {
-                            deviceList.add(BlueDevice(it.name ?: "未知设备", it))
+                            deviceList.add(BlueDevice(it.name ?: context.getString(R.string.unknown_device), it))
                             adapter.notifyDataSetChanged()
                         }
                     }
@@ -184,15 +184,15 @@ class BlueToothDevices : ComponentActivity(){
                     when (bondState) {
                         BluetoothDevice.BOND_BONDED -> {
                             // 配对成功
-                            showMsg("配对成功: ${device?.name}")
+                            showMsg(getString(R.string.pairing_success, device?.name))
                         }
                         BluetoothDevice.BOND_BONDING -> {
                             // 正在配对
-                            showMsg("正在配对: ${device?.name}")
+                            showMsg(getString(R.string.pairing_in_progress, device?.name))
                         }
                         BluetoothDevice.BOND_NONE -> {
                             // 配对取消
-                            showMsg("配对取消: ${device?.name}")
+                            showMsg(getString(R.string.pairing_cancelled, device?.name))
                         }
                     }
                 }
@@ -225,7 +225,7 @@ class BlueToothDevices : ComponentActivity(){
             // 检查设备是否已在列表中
             val exists = deviceList.any { it.device.address == device.address }
             if (!exists) {
-                deviceList.add(BlueDevice(device.name ?: "未知BLE设备", device))
+                deviceList.add(BlueDevice(device.name ?: this@BlueToothDevices.getString(R.string.unknown_ble_device), device))
                 adapter.notifyDataSetChanged()
             }
         }
@@ -236,7 +236,7 @@ class BlueToothDevices : ComponentActivity(){
                 val device = result.device
                 val exists = deviceList.any { it.device.address == device.address }
                 if (!exists) {
-                    deviceList.add(BlueDevice(device.name ?: "未知BLE设备", device))
+                    deviceList.add(BlueDevice(device.name ?: this@BlueToothDevices.getString(R.string.unknown_ble_device), device))
                 }
             }
             adapter.notifyDataSetChanged()
@@ -244,7 +244,7 @@ class BlueToothDevices : ComponentActivity(){
         
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            showMsg("BLE扫描失败，错误码: $errorCode")
+            showMsg(getString(R.string.ble_scan_failed, errorCode))
         }
     }
     
@@ -253,13 +253,13 @@ class BlueToothDevices : ComponentActivity(){
         // 获取蓝牙适配器
         val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = manager.adapter ?: run {
-            showMsg("无法获取蓝牙适配器")
+            showMsg(getString(R.string.bluetooth_adapter_unavailable))
             return
         }
         
         // 检查蓝牙是否启用
         if (!bluetoothAdapter.isEnabled) {
-            showMsg("蓝牙未启用")
+            showMsg(getString(R.string.bluetooth_not_enabled))
             return
         }
         
@@ -290,10 +290,10 @@ class BlueToothDevices : ComponentActivity(){
             isScanning = true
             val started = bluetoothAdapter.startDiscovery()
             if (!started) {
-                showMsg("启动经典蓝牙扫描失败")
+                showMsg(getString(R.string.classic_scan_failed))
             }
         } catch (e: SecurityException) {
-            showMsg("启动经典蓝牙扫描权限异常")
+            showMsg(getString(R.string.classic_scan_permission_error))
             e.printStackTrace()
         }
         
@@ -306,15 +306,15 @@ class BlueToothDevices : ComponentActivity(){
                     .build()
                 scanner.startScan(null, scanSettings, leScanCallback)
             } else {
-                showMsg("BLE扫描器不可用")
+                showMsg(getString(R.string.ble_scanner_unavailable))
             }
         } catch (e: SecurityException) {
-            showMsg("启动BLE扫描权限异常")
+            showMsg(getString(R.string.ble_scan_permission_error))
             e.printStackTrace()
         }
         
         // 显示扫描中提示
-        showMsg("正在扫描蓝牙设备...")
+        showMsg(getString(R.string.scanning_bluetooth_devices))
         
         // 自动选中上次选中的已配对设备
         autoSelectLastDevice()
@@ -322,7 +322,7 @@ class BlueToothDevices : ComponentActivity(){
         // 30秒后停止扫描
         Handler(Looper.getMainLooper()).postDelayed({
             stopScan()
-            showMsg("扫描完成")
+            showMsg(getString(R.string.scan_completed))
         }, 30000)
     }
     
@@ -384,10 +384,10 @@ class BlueToothDevices : ComponentActivity(){
         // 添加已配对的设备
         if (!myPairedDevices.isEmpty()) {
             for (device: BluetoothDevice in myPairedDevices) {
-                deviceList.add(BlueDevice(device.name,device))
+                deviceList.add(BlueDevice(device.name ?: getString(R.string.unknown_device),device))
             }
         } else {
-            Toast.makeText(this, "没有找到蓝牙设备", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_bluetooth_devices_found), Toast.LENGTH_SHORT).show()
         }
 
         // 初始化适配器
@@ -554,7 +554,7 @@ class BlueToothDevices : ComponentActivity(){
             
             // 在设备名称后添加配对状态标识
             if (isPaired) {
-                holder.deviceName.text = "${device.deviceName} (已配对)"
+                holder.deviceName.text = "${device.deviceName} (${context.getString(R.string.paired_status)})"
             } else {
                 holder.deviceName.text = device.deviceName
             }
