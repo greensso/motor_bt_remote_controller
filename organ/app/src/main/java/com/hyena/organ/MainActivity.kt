@@ -32,6 +32,9 @@ import com.hyena.organ.ui.theme.OrganTheme
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.UUID
+import android.net.Uri
+import android.provider.Settings
+import android.app.AlertDialog
 import kotlin.concurrent.thread
 
 /**
@@ -67,6 +70,28 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun isAndroid12() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+    private fun checkBluetoothPermissions(): Boolean {
+        return if (isAndroid12()) {
+            hasPermission(Manifest.permission.BLUETOOTH_CONNECT)
+        } else {
+            hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("权限申请")
+            .setMessage("蓝牙权限未授予，点击确定前往系统设置页面开启权限")
+            .setPositiveButton("确定") { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", packageName, null)
+                }
+                startActivity(intent)
+            }
+            .setNegativeButton("取消", null)
+            .show()
+    }
 
     //请求定位权限意图
     private val requestLocation =
@@ -156,6 +181,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!checkBluetoothPermissions()) {
+            showPermissionDeniedDialog()
+        }
+
         setContentView(layout.activity_controler)
 
         if (isOpenBluetooth()) {
