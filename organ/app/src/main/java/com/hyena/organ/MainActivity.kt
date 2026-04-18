@@ -33,6 +33,8 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.util.UUID
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.app.AlertDialog
 import kotlin.concurrent.thread
@@ -53,6 +55,8 @@ class MainActivity : ComponentActivity() {
     var myUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     var mBluetoothSocket: BluetoothSocket? = null
     private var isBlueConnected = false
+    // 连接状态标记
+    private var isConnecting = false
 
   //  lateinit var binding : ActivityMainBinding
 
@@ -71,32 +75,14 @@ class MainActivity : ComponentActivity() {
 
     private fun isAndroid12() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-    private fun checkBluetoothPermissions(): Boolean {
-        return if (isAndroid12()) {
-            hasPermission(Manifest.permission.BLUETOOTH_CONNECT)
-        } else {
-            hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-    }
 
-    private fun showPermissionDeniedDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("权限申请")
-            .setMessage("蓝牙权限未授予，点击确定前往系统设置页面开启权限")
-            .setPositiveButton("确定") { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", packageName, null)
-                }
-                startActivity(intent)
-            }
-            .setNegativeButton("取消", null)
-            .show()
-    }
 
     //请求定位权限意图
     private val requestLocation =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
+                // 权限授予后，重新检查权限
+                checkPermissions()
             } else {
                 showMsg("Android12以下，6及以上需要定位权限才能扫描设备")
             }
@@ -106,8 +92,8 @@ class MainActivity : ComponentActivity() {
     private val requestBluetoothConnect =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                //打开蓝牙
-                enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+                // 权限授予后，重新检查权限
+                checkPermissions()
             } else {
                 showMsg("Android12中未获取此权限，则无法打开蓝牙。")
             }
@@ -117,6 +103,8 @@ class MainActivity : ComponentActivity() {
     private val requestBluetoothScan =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
+                // 权限授予后，重新检查权限
+                checkPermissions()
             } else {
                 showMsg("Android12中未获取此权限，则无法扫描蓝牙。")
             }
@@ -127,6 +115,17 @@ class MainActivity : ComponentActivity() {
         if (it.resultCode == RESULT_OK) {
             if (isOpenBluetooth()) {
                 myBluetoothAdapter = (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
+                // 蓝牙打开后，尝试自动连接到上次选择的设备
+                val sharedPreferences = getSharedPreferences(BlueToothDevices.PREF_NAME, Context.MODE_PRIVATE)
+                val lastSelectedName = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_NAME, "") ?: ""
+                val lastSelectedAddress = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_ADDRESS, "") ?: ""
+                if (lastSelectedName.isNotEmpty() && lastSelectedAddress.isNotEmpty()) {
+                    bluetoothName = lastSelectedName
+                    bluetoothAddress = lastSelectedAddress
+                    // 显示连接中状态
+                    SetConnectedDeviceName("${bluetoothName} (连接中...)")
+                    ConnectBluetooth()
+                }
             } else {
                 showMsg("蓝牙未打开")
             }
@@ -140,6 +139,8 @@ class MainActivity : ComponentActivity() {
             val strAddress = it.data?.getStringExtra("address")
             bluetoothName = strName.toString()
             bluetoothAddress = strAddress.toString()
+            // 更新显示的设备名称
+            SetConnectedDeviceName(bluetoothName)
             ConnectBluetooth()
          //   Toast.makeText(this,"返回的数据： $bluetoothName",Toast.LENGTH_LONG).show()
         }
@@ -179,20 +180,76 @@ class MainActivity : ComponentActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
+    // 检查权限并处理
+    private fun checkPermissions() {
+        // 检查蓝牙是否已打开
+        if (!isOpenBluetooth()) {
+            // 检查是否是Android 12
+            if (isAndroid12()) {
+                // 检查是否有BLUETOOTH_CONNECT权限
+                if (hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+                    // 打开蓝牙
+                    enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+                } else {
+                    // 请求权限
+                    requestBluetoothConnect.launch(Manifest.permission.BLUETOOTH_CONNECT)
+                }
+            } else {
+                // 不是Android 12，直接打开蓝牙
+                enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            }
+        }
+        
+        // 检查其他必要的权限
+        if (isAndroid12()) {
+            // Android 12及以上需要BLUETOOTH_SCAN权限
+            if (!hasPermission(Manifest.permission.BLUETOOTH_SCAN)) {
+                requestBluetoothScan.launch(Manifest.permission.BLUETOOTH_SCAN)
+            }
+        } else {
+            // Android 12以下需要位置权限
+            if (!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                requestLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (!checkBluetoothPermissions()) {
-            showPermissionDeniedDialog()
-        }
 
         setContentView(layout.activity_controler)
 
         if (isOpenBluetooth()) {
             myBluetoothAdapter = (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
         }
+        
+        // 检查权限
+        checkPermissions()
 
         SetConnectedDeviceName("")
+
+        // 显示上次选择的设备并自动连接
+        val sharedPreferences = getSharedPreferences(BlueToothDevices.PREF_NAME, Context.MODE_PRIVATE)
+        val lastSelectedName = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_NAME, "") ?: ""
+        val lastSelectedAddress = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_ADDRESS, "") ?: ""
+        if (lastSelectedName.isNotEmpty() && lastSelectedAddress.isNotEmpty()) {
+            // 先显示设备名称
+            SetConnectedDeviceName(lastSelectedName)
+            
+            // 检查蓝牙是否已打开
+            if (isOpenBluetooth()) {
+                // 蓝牙已打开，立即连接
+                bluetoothName = lastSelectedName
+                bluetoothAddress = lastSelectedAddress
+                // 延迟一下确保权限检查完成
+                Handler(Looper.getMainLooper()).postDelayed({
+                    ConnectBluetooth()
+                }, 500) // 减少延迟，更快开始连接
+            } else {
+                // 蓝牙未打开，请求打开
+                enableBluetooth.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            }
+        }
 
         findViewById<Button>(id.btn_settings).setOnClickListener({
             val intent = Intent(this, BlueToothDevices::class.java)
@@ -200,12 +257,38 @@ class MainActivity : ComponentActivity() {
         })
 
         findViewById<Button>(id.btn_power).setOnClickListener({
-            if (mBluetoothSocket != null && isBlueConnected)
-            {
+            if (mBluetoothSocket != null && isBlueConnected) {
+                // 已连接，直接发送命令
                 try {
                     mBluetoothSocket!!.outputStream.write("ON_OFF ".toByteArray(Charsets.UTF_8))
                 } catch (e : IOException){
                     showMsg(e.toString())
+                }
+            } else if (!isConnecting) {
+                // 未连接且不在连接中，尝试连接
+                val sharedPreferences = getSharedPreferences(BlueToothDevices.PREF_NAME, Context.MODE_PRIVATE)
+                val lastSelectedName = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_NAME, "") ?: ""
+                val lastSelectedAddress = sharedPreferences.getString(BlueToothDevices.KEY_SELECT_ADDRESS, "") ?: ""
+                if (lastSelectedName.isNotEmpty() && lastSelectedAddress.isNotEmpty()) {
+                    bluetoothName = lastSelectedName
+                    bluetoothAddress = lastSelectedAddress
+                    // 先显示连接中状态
+                    SetConnectedDeviceName("${bluetoothName} (连接中...)")
+                    // 调用ConnectBluetooth方法进行连接
+                    ConnectBluetooth()
+                    
+                    // 延迟一下确保连接完成，然后发送命令
+                    Handler(Looper.getMainLooper()).postDelayed({ 
+                        if (mBluetoothSocket != null && isBlueConnected) {
+                            try {
+                                mBluetoothSocket!!.outputStream.write("ON_OFF ".toByteArray(Charsets.UTF_8))
+                            } catch (e : IOException){
+                                showMsg(e.toString())
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    showMsg("请先选择蓝牙设备")
                 }
             }
         })
@@ -499,39 +582,60 @@ class MainActivity : ComponentActivity() {
             return
         }
 
-        thread {
-            try {
-                //这一段代码必须在子线程处理，直接使用协程会阻塞主线程，所以用Thread,其实也可以直接用Thread，不用协程
-                if (mBluetoothSocket == null || !isBlueConnected) {
-                    val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
-                    myBluetoothAdapter = manager!!.adapter ?: return@thread
+        if (!isConnecting) {
+            isConnecting = true
+            // 显示连接中状态
+            runOnUiThread {
+                SetConnectedDeviceName("${bluetoothName} (连接中...)")
+            }
 
-                    val device: BluetoothDevice = myBluetoothAdapter!!.getRemoteDevice(bluetoothAddress)
-                    if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.BLUETOOTH_CONNECT
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return@thread
+            thread {
+                try {
+                    //这一段代码必须在子线程处理，直接使用协程会阻塞主线程，所以用Thread,其实也可以直接用Thread，不用协程
+                    if (mBluetoothSocket == null || !isBlueConnected) {
+                        val manager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+                        myBluetoothAdapter = manager!!.adapter ?: run {
+                            runOnUiThread {
+                                showMsg("无法获取蓝牙适配器")
+                                SetConnectedDeviceName("${bluetoothName} (连接失败)")
+                                isConnecting = false
+                            }
+                            return@thread
+                        }
+
+                        val device: BluetoothDevice = myBluetoothAdapter!!.getRemoteDevice(bluetoothAddress)
+                        if (ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.BLUETOOTH_CONNECT
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            runOnUiThread {
+                                showMsg("缺少蓝牙连接权限")
+                                SetConnectedDeviceName("${bluetoothName} (缺少权限)")
+                                isConnecting = false
+                            }
+                            return@thread
+                        }
+                        mBluetoothSocket =
+                            device!!.createInsecureRfcommSocketToServiceRecord(myUUID)
+                       // mBluetoothAdapter.cancelDiscovery()
+                        mBluetoothSocket!!.connect()
+                        isBlueConnected = true
+                        // 连接成功，显示连接状态
+                        runOnUiThread {
+                            SetConnectedDeviceName("${bluetoothName} (已连接)")
+                            isConnecting = false
+                        }
                     }
-                    mBluetoothSocket =
-                        device!!.createInsecureRfcommSocketToServiceRecord(myUUID)
-                   // mBluetoothAdapter.cancelDiscovery()
-                    mBluetoothSocket!!.connect()
-                    isBlueConnected = true
-                    SetConnectedDeviceName(bluetoothName)
+                } catch (e: IOException) {
+                    //连接失败
+                    e.printStackTrace()
+                    runOnUiThread {
+                        showMsg("连接失败: " + e.message)
+                        SetConnectedDeviceName("${bluetoothName} (连接失败)")
+                        isConnecting = false
+                    }
                 }
-            } catch (e: IOException) {
-                //连接失败销毁Activity
-            //    finish()
-                e.printStackTrace()
             }
         }
     }

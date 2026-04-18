@@ -66,6 +66,9 @@ class BlueToothDevices : ComponentActivity(){
         const val BLUE_NAME: String = "DeviceName"
         var selectName : String = ""
         var selectAddress : String = ""
+        const val PREF_NAME = "BluetoothPrefs"
+        const val KEY_SELECT_NAME = "selectName"
+        const val KEY_SELECT_ADDRESS = "selectAddress"
     }
 
     private fun isOpenBluetooth(): Boolean {
@@ -82,6 +85,22 @@ class BlueToothDevices : ComponentActivity(){
     }
 
     private fun isAndroid12() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    
+    // 保存选中的设备信息
+    private fun saveSelectedDevice() {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_SELECT_NAME, selectName)
+        editor.putString(KEY_SELECT_ADDRESS, selectAddress)
+        editor.apply()
+    }
+    
+    // 加载选中的设备信息
+    private fun loadSelectedDevice() {
+        val sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        selectName = sharedPreferences.getString(KEY_SELECT_NAME, "") ?: ""
+        selectAddress = sharedPreferences.getString(KEY_SELECT_ADDRESS, "") ?: ""
+    }
 
     //请求定位权限意图
     private val requestLocation =
@@ -244,34 +263,6 @@ class BlueToothDevices : ComponentActivity(){
             return
         }
         
-        // 检查必要的权限
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // Android 12及以上
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) 
-                != PackageManager.PERMISSION_GRANTED) {
-                showMsg("缺少BLUETOOTH_SCAN权限")
-                return
-            }
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) 
-                != PackageManager.PERMISSION_GRANTED) {
-                showMsg("缺少位置权限")
-                return
-            }
-        } else {
-            // Android 12以下需要位置权限
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) 
-                != PackageManager.PERMISSION_GRANTED) {
-                showMsg("缺少位置权限")
-                return
-            }
-            // 检查BLUETOOTH_ADMIN权限
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) 
-                != PackageManager.PERMISSION_GRANTED) {
-                showMsg("缺少BLUETOOTH_ADMIN权限")
-                return
-            }
-        }
-        
         // 清空设备列表（先清空，后添加已配对设备）
         deviceList.clear()
         
@@ -411,6 +402,9 @@ class BlueToothDevices : ComponentActivity(){
         setContentView(R.layout.activity_bluetoothdevices)
 
         try {
+            // 加载上次选中的设备
+            loadSelectedDevice()
+            
             // 初始化适配器
             val layoutManager = LinearLayoutManager(this)
             findViewById<RecyclerView>(R.id.recycler_blue_device_list).layoutManager = layoutManager
@@ -506,6 +500,10 @@ class BlueToothDevices : ComponentActivity(){
              //   it.context.setResult(RESULT_OK, intent)
                 BlueToothDevices.selectName = device.deviceName
                 BlueToothDevices.selectAddress = device.device.address
+                
+                // 保存选中的设备
+                (context as BlueToothDevices).saveSelectedDevice()
+                
              //   Toast.makeText(parent.context, device.deviceName, Toast.LENGTH_SHORT).show()
                 
                 // 刷新适配器以显示选中状态
