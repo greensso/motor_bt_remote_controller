@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">แวนกี้</string>
+    <string name="button_text_ok">ตกลง</string>
+    <string name="mode_button_speed_up">ความเร็ว+</string>
+    <string name="mode_button_speed_down">ความเร็ว-</string>
+    <string name="mode_button_mode_up">โหมด+</string>
+    <string name="mode_button_mode_down">โหมด-</string>
+    <string name="number_button_text_1">1</string>
+    <string name="number_button_text_2">2</string>
+    <string name="number_button_text_3">3</string>
+    <string name="number_button_text_4">4</string>
+    <string name="number_button_text_5">5</string>
+    <string name="number_button_text_6">6</string>
+    <string name="number_button_text_7">7</string>
+    <string name="number_button_text_8">8</string>
+    <string name="number_button_text_9">9</string>
+    <string name="number_button_text_10">10</string>
+    <string name="number_button_text_11">11</string>
+    <string name="number_button_text_12">12</string>
+    <string name="number_button_text_13">13</string>
+    <string name="number_button_text_14">14</string>
+    <string name="number_button_text_15">15</string>
+    <string name="number_button_text_16">16</string>
+    <string name="number_button_text_17">17</string>
+    <string name="number_button_text_18">18</string>
+    <string name="number_button_text_19">19</string>
+    <string name="number_button_text_20">20</string>
+    <string name="text_address">ที่อยู่</string>
+    <string name="text_name">ชื่อ</string>
+    <string name="button_text_refresh">รีเฟรช</string>
+    <string name="connecting_status">กำลังเชื่อมต่อ...</string>
+    <string name="connected_status">เชื่อมต่อแล้ว</string>
+    <string name="paired_status">จับคู่แล้ว</string>
+    <string name="unknown_ble_device">อุปกรณ์BLEที่ไม่รู้จัก</string>
+    <string name="unknown_device">อุปกรณ์ที่ไม่รู้จัก</string>
+    <string name="no_bluetooth_devices_found">ไม่พบอุปกรณ์บลูทูธ</string>
+</resources>
