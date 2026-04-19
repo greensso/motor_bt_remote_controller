@@ -34,4 +34,5 @@
     <string name="unknown_ble_device">อุปกรณ์BLEที่ไม่รู้จัก</string>
     <string name="unknown_device">อุปกรณ์ที่ไม่รู้จัก</string>
     <string name="no_bluetooth_devices_found">ไม่พบอุปกรณ์บลูทูธ</string>
+    <string name="connection_exception">ข้อยกเว้นการเชื่อมต่อ</string>
 </resources>

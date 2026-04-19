@@ -51,4 +51,5 @@
     <string name="ble_scan_permission_error">BLE scan permission error</string>
     <string name="scanning_bluetooth_devices">Scanning for Bluetooth devices...</string>
     <string name="scan_completed">Scan completed</string>
+    <string name="connection_exception">Connection Exception</string>
 </resources>

@@ -171,7 +171,7 @@ class MainActivity : ComponentActivity() {
                         //showMsg("Speed +")
                     }
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    showMsg(getString(R.string.connection_exception))
                 }
             }
             return true
@@ -262,7 +262,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("ON_OFF ".toByteArray(Charsets.UTF_8))
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             } else if (!isConnecting) {
                 // 未连接且不在连接中，尝试连接
@@ -283,7 +283,7 @@ class MainActivity : ComponentActivity() {
                             try {
                                 mBluetoothSocket!!.outputStream.write("ON_OFF ".toByteArray(Charsets.UTF_8))
                             } catch (e : IOException){
-                                showMsg(e.toString())
+                                SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                             }
                         }
                     }, 2000)
@@ -299,7 +299,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODEXX ".toByteArray(Charsets.UTF_8))
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -310,7 +310,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODEUP".toByteArray(Charsets.UTF_8))
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -320,7 +320,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODEDW".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -331,7 +331,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("SPEED+".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -343,7 +343,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("SPEED>".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
 
@@ -356,7 +356,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("SPEED-".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -368,7 +368,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("SPEED<".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
 
@@ -380,7 +380,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE01".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -390,7 +390,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE02".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -400,7 +400,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE03".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -410,7 +410,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE04".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -420,7 +420,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE05".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -430,7 +430,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE06".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -440,7 +440,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE07".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -450,7 +450,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE08".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -460,7 +460,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE09".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -470,7 +470,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE10".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -480,7 +480,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE11".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -490,7 +490,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE12".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -500,7 +500,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE13".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -510,7 +510,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE14".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -520,7 +520,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE15".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -530,7 +530,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE16".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -540,7 +540,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE17".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -550,7 +550,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE18".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -560,7 +560,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE19".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -570,7 +570,7 @@ class MainActivity : ComponentActivity() {
                 try {
                     mBluetoothSocket!!.outputStream.write("MODE20".toByteArray())
                 } catch (e : IOException){
-                    showMsg(e.toString())
+                    SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                 }
             }
         })
@@ -628,11 +628,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } catch (e: IOException) {
-                    //连接失败
                     e.printStackTrace()
                     runOnUiThread {
-                        showMsg("连接失败: " + e.message)
-                        SetConnectedDeviceName("${bluetoothName} (连接失败)")
+                        SetConnectedDeviceName("${bluetoothName} (${getString(R.string.connection_exception)})")
                         isConnecting = false
                     }
                 }

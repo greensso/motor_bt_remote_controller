@@ -51,4 +51,5 @@
     <string name="ble_scan_permission_error">啟動BLE掃描權限異常</string>
     <string name="scanning_bluetooth_devices">正在掃描藍牙設備...</string>
     <string name="scan_completed">掃描完成</string>
+    <string name="connection_exception">連接異常</string>
 </resources>

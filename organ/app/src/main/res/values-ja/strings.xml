@@ -34,4 +34,5 @@
     <string name="unknown_ble_device">未知のBLEデバイス</string>
     <string name="unknown_device">未知のデバイス</string>
     <string name="no_bluetooth_devices_found">Bluetoothデバイスが見つかりません</string>
+    <string name="connection_exception">接続異常</string>
 </resources>

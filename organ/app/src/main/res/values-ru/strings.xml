@@ -51,4 +51,5 @@
     <string name="ble_scan_permission_error">Ошибка разрешения BLE сканирования</string>
     <string name="scanning_bluetooth_devices">Сканирование устройств Bluetooth...</string>
     <string name="scan_completed">Сканирование завершено</string>
+    <string name="connection_exception">Ошибка соединения</string>
 </resources>

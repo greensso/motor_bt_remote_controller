@@ -81,7 +81,7 @@ class BlueToothDevices : ComponentActivity(){
         checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
     private fun showMsg(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun isAndroid12() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
@@ -370,7 +370,7 @@ class BlueToothDevices : ComponentActivity(){
                 Manifest.permission.BLUETOOTH_CONNECT
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this, "没有蓝牙权限", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "没有蓝牙权限", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -387,7 +387,7 @@ class BlueToothDevices : ComponentActivity(){
                 deviceList.add(BlueDevice(device.name ?: getString(R.string.unknown_device),device))
             }
         } else {
-            Toast.makeText(this, getString(R.string.no_bluetooth_devices_found), Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, getString(R.string.no_bluetooth_devices_found), Toast.LENGTH_SHORT).show()
         }
 
         // 初始化适配器
@@ -521,7 +521,7 @@ class BlueToothDevices : ComponentActivity(){
                         ) {
                             device.device.createBond()
                         } else {
-                            Toast.makeText(context, "需要蓝牙连接权限", Toast.LENGTH_SHORT).show()
+                           // Toast.makeText(context, "需要蓝牙连接权限", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         // Android 12以下直接配对
